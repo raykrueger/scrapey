@@ -17,7 +17,7 @@ module Scrapey
         href = link.attributes['href'].value
         link_evaluator.resolve(href) if link_evaluator.follow? href
       end
-      links.compact
+      links.compact.uniq
     end
   end
 end
