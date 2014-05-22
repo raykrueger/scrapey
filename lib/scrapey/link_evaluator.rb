@@ -7,6 +7,7 @@ module Scrapey
     STARTS_WITH_HTTP = /\Ahttp/i
     MAILTO = /\Amailto/i
     SCHEME_RELATIVE = /\A\/\//
+    LITERAL_PATH = /\A\//
 
     attr_reader :base_url, :uri
 
@@ -19,6 +20,7 @@ module Scrapey
       case href
       when STARTS_WITH_HTTP then href
       when SCHEME_RELATIVE  then "#{uri.scheme}:#{href}"
+      when LITERAL_PATH  then "#{uri.scheme}://#{uri.host}#{href}"
       when MAILTO           then nil
       else #assume it's relative
         URI.join(base_url, href).to_s

@@ -31,6 +31,10 @@ describe Scrapey::LinkEvaluator do
     it "resolves relative urls" do
       expect(subject.resolve("boosh")).to eq "http://www.example.com/boosh"
     end
+
+    it "resolves relative literal paths" do
+      expect(subject.resolve("/boosh")).to eq "http://www.example.com/boosh"
+    end
   end
 
   describe "follow?" do
