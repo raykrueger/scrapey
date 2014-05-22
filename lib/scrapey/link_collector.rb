@@ -9,9 +9,9 @@ module Scrapey
 
       uri = URI.parse(target)
 
-      response = RestClient.get target
+      response = request(target)
 
-      html = Nokogiri::HTML(response.return!)
+      html = Nokogiri::HTML(response)
       links = html.css("a[href != '#']")
       links = links.map do |link|
         href = link.attributes['href'].value
@@ -19,5 +19,13 @@ module Scrapey
       end
       links.compact.uniq
     end
+
+    private
+
+    def request(target)
+      response = RestClient.get target
+      response.return!
+    end
+
   end
 end
