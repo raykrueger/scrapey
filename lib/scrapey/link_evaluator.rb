@@ -25,5 +25,10 @@ module Scrapey
       end
     end
 
+    def follow?(href)
+      url = resolve(href)
+      url && URI.parse(url).host == uri.host
+    end
+
   end
 end

@@ -32,4 +32,22 @@ describe Scrapey::LinkEvaluator do
       expect(subject.resolve("boosh")).to eq "http://www.example.com/boosh"
     end
   end
+
+  describe "follow?" do
+    it "follows relative urls" do
+      expect(subject.follow? "boosh").to be_true
+    end
+
+    it "follows fully qualified urls for the same domain" do
+      expect(subject.follow? "http://www.example.com/boosh").to be_true
+    end
+
+    it "does not follow urls for a different domain" do
+      expect(subject.follow? "http://twitter.com/raykrueger").to be_false 
+    end
+
+    it "does not follow mailto links" do
+      expect(subject.follow? "mailto:nope@example.com").to be_false
+    end
+  end
 end
