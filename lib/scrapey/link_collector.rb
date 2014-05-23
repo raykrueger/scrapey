@@ -30,7 +30,7 @@ module Scrapey
     private
 
     def request(target, link_evaluator, redirectLimit = REDIRECT_LIMIT)
-      raise TooManyRedirects if redirectLimit == 0
+      raise TooManyRedirects if redirectLimit.zero?
 
       uri = URI.parse(target)
       http = Net::HTTP.new(uri.host, uri.port)
