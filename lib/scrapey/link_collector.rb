@@ -22,7 +22,7 @@ module Scrapey
       links = html.css("a[href != '#']")
       links = links.map do |link|
         href = link.attributes['href'].value
-        link_evaluator.resolve(href) if link_evaluator.follow? href
+        link_evaluator.resolve(href)
       end
       links.compact.uniq
     end

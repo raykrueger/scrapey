@@ -30,11 +30,7 @@ describe Scrapey::LinkCollector do
       end
 
       it "collects followable links" do
-        expect(collected_links).to eq ["http://www.example.com/findme", "http://www.example.com/findmetoo"]
-      end
-
-      it "does not collect external links" do
-        expect(collected_links).to_not include "http://twitter.com/raykrueger"
+        expect(collected_links).to eq ["http://www.example.com/findme", "http://www.example.com/findmetoo", "http://twitter.com/raykrueger"]
       end
     end
 
