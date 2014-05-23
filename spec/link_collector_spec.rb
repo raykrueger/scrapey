@@ -26,7 +26,7 @@ describe Scrapey::LinkCollector do
 
       before do
         stub_request(:get, base_url).
-         to_return(status: 200, body: html)
+         to_return(status: 200, body: html, headers: {"Content-Type" => "text/html"})
       end
 
       it "collects followable links" do
@@ -39,14 +39,51 @@ describe Scrapey::LinkCollector do
     end
 
     context "with errors" do
-      
-      before do
-        stub_request(:get, base_url).
-         to_return(status: 500, body: "BOOM")
+
+      context "non-success response" do      
+        before do
+          stub_request(:get, base_url).
+            to_return(status: 500, body: "BOOM")
+        end
+
+        it "raises errors" do
+          expect{ subject.collect_links(base_url) }.to raise_error Net::HTTPFatalError
+        end
       end
 
-      it "collects followable links" do
-        expect{ subject.collect_links(base_url) }.to raise_error RestClient::InternalServerError
+      context "too many redirects" do
+        before do
+          stub_request(:get, base_url).
+            to_return(status: 302, headers: {"Location" => base_url})
+        end
+
+        it "raises errors" do
+          expect{ subject.collect_links(base_url) }.to raise_error Scrapey::LinkCollector::TooManyRedirects
+        end
+      end
+
+      context "incorrect content type" do
+        before do
+          stub_request(:get, base_url).
+            to_return(status: 200, headers: {"Content-Type" => "image/png"})
+        end
+
+
+        it "raises errors" do
+          expect{ subject.collect_links(base_url) }.to raise_error Scrapey::LinkCollector::InvalidContentType
+        end
+      end
+
+      context "link_evaluator refuses to follow redirect" do
+        before do
+          stub_request(:get, base_url).
+            to_return(status: 302, headers: {"Location" => "http://twitter.com/raykrueger"})
+        end
+
+
+        it "raises errors" do
+          expect{ subject.collect_links(base_url) }.to raise_error Scrapey::LinkCollector::ExternalRedirect
+        end
       end
 
     end
