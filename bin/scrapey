@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'scrapey'
+require 'scrapey/scraper'
+
+scraper = Scrapey::Scraper.new
+followed = scraper.scrape(ARGV[0], 5)
+
+followed.each do |key, value|
+  puts key
+  value.each do |link|
+    puts "  #{link}"
+  end
+end 
+
