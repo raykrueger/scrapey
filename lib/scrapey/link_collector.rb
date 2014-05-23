@@ -10,6 +10,7 @@ module Scrapey
     class ExternalRedirect < StandardError ; end
 
     CONTENT_TYPE_HTML = /text\/html/
+    REDIRECT_LIMIT = 3
 
     def collect_links(target)
       link_evaluator = LinkEvaluator.new(target)
@@ -28,7 +29,7 @@ module Scrapey
 
     private
 
-    def request(target, link_evaluator, redirectLimit = 3)
+    def request(target, link_evaluator, redirectLimit = REDIRECT_LIMIT)
       raise TooManyRedirects if redirectLimit == 0
 
       uri = URI.parse(target)
