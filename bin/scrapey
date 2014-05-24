@@ -3,6 +3,11 @@
 require 'scrapey'
 require 'scrapey/scraper'
 
+if ARGV.empty?
+  puts'Usage: scrapey {url}'
+  exit 1
+end
+
 scraper = Scrapey::Scraper.new
 followed = scraper.scrape(ARGV[0], 5)
 
