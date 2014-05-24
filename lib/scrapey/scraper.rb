@@ -1,7 +1,6 @@
-require "logger"
-
 module Scrapey
   class Scraper
+    include Logging
 
     def scrape(target, maxDepth=3)
       followed = Hash.new{|hash, key| hash[key] = []}
@@ -32,8 +31,5 @@ module Scrapey
       followed
     end
 
-    def logger
-      @logger ||= Logger.new STDOUT
-    end
   end
 end

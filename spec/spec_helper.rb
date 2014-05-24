@@ -12,4 +12,12 @@ require 'scrapey'
 require 'webmock/rspec'
 
 RSpec.configure do |config|
+
+  config.before :all do
+    Scrapey.logger.level = Logger::FATAL
+  end
+
+  config.after :all do
+    Scrapey.logger = nil
+  end
 end
