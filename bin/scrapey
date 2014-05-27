@@ -1,15 +1,31 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
+
 require 'scrapey'
 require 'scrapey/scraper'
 
-if ARGV.empty?
-  puts'Usage: scrapey {url}'
-  exit 1
+max_depth = 5
+
+opt_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: scrapey [options] url"
+  opts.separator "Options"
+  opts.on "-d", "--depth DEPTH", Integer, "Maximum depth to follow urls down. Default: 5" do |depth|
+    max_depth = depth
+  end
+end
+
+opt_parser.parse!
+
+url = ARGV.last
+
+if url.nil?
+  puts opt_parser
+  exit -1
 end
 
 scraper = Scrapey::Scraper.new
-followed = scraper.scrape(ARGV[0], 5)
+followed = scraper.scrape(url, max_depth)
 
 followed.each do |key, value|
   puts key
